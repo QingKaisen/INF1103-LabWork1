@@ -3,6 +3,75 @@ import json
 
 INVENTORY_FILE = "inventory.json"
 
+def load_inventory(filename):
+    """
+    Checks whether the inventory file exists and loads it if so.
+    Input:  filename (str)
+    Output: list of product dicts. [] if the file does not exist.
+    """
+    if os.path.exists(filename):
+        print(f"{filename} found.")
+        with open(filename, "r") as f:
+            inventory = json.load(f)
+        print("Inventory loaded successfully.")
+        return inventory
+    else:
+        print(f"{filename} not found. Starting with an empty inventory.")
+        return []
+
+
+def add_product(inventory, product_id, name, price, stock):
+    """
+    Input:  inventory (list), product_id, name, price, stock
+    Output: a NEW list with the product dict appended.
+            Does not mutate the list that was passed in.
+    """
+    new_product = {"id": product_id, "name": name, "price": price, "stock": stock}
+    return inventory + [new_product]
+
+
+def search_product(inventory, product_id):
+    """
+    Input:  inventory (list), product_id (str)
+    Output: the matching product dict, or None if not found
+    """
+    for product in inventory:
+        if product["id"] == product_id:
+            return product
+    return None
+
+
+def update_stock(inventory, product_id, new_stock):
+    """
+    Input:  inventory (list), product_id (str), new_stock (int)
+    Output: a NEW list with that product's stock replaced.
+            Products that don't match are copied through unchanged.
+    """
+    updated = []
+    for product in inventory:
+        if product["id"] == product_id:
+            updated_product = product.copy()
+            updated_product["stock"] = new_stock
+            updated.append(updated_product)
+        else:
+            updated.append(product)
+    return updated
+
+
+def display_all(inventory):
+    """
+    Input:  inventory (list)
+    Output: None (prints a formatted table of every product)
+    """
+    print("Current Inventory")
+    print("-" * 50)
+    if not inventory:
+        print("(No products in inventory.)")
+    else:
+        for product in inventory:
+            print(f"ID: {product['id']} | Name: {product['name']} | "
+                  f"Price: ${product['price']:.2f} | Stock: {product['stock']}")
+    print("-" * 50)
 
 def main():
     print("=========Welcome to the Inventory Management System=========")
