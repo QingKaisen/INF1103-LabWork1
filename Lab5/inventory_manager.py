@@ -19,6 +19,13 @@ def load_inventory(filename):
         print(f"{filename} not found. Starting with an empty inventory.")
         return []
 
+def save_inventory(filename, inventory):
+    """
+    Input:  filename (str), inventory (list of dicts)
+    Output: None (writes the inventory to disk as JSON)
+    """
+    with open(filename, "w") as f:
+        json.dump(inventory, f, indent=4)
 
 def add_product(inventory, product_id, name, price, stock):
     """
